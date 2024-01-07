@@ -35,6 +35,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 keyBoardType: TextInputType.number,
               ),
               appButton(
+                width: 200,
+                height: 50,
+                color: MaterialStateProperty.all(Colors.greenAccent),
                 buttonText: "SIGN UP",
                 buttonAction: () {},
               ),

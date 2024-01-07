@@ -37,10 +37,18 @@ class _LogInPageState extends State<LogInPage> {
                 keyBoardType: TextInputType.number,
               ),
               appButton(
+                width: 200,
+                height: 50,
+                color: MaterialStateProperty.all(Colors.greenAccent),
                 buttonText: "LOG IN",
-                buttonAction: () {},
+                buttonAction: () {
+                  Navigator.pushNamed(context, '/HomePage');
+                },
               ),
               appButton(
+                width: 200,
+                height: 50,
+                color: MaterialStateProperty.all(Colors.greenAccent),
                 buttonText: "SIGN UP",
                 buttonAction: () {
                   Navigator.pushNamed(context, '/SignUp');

@@ -9,6 +9,7 @@ void main() {
       routes: {
         '/LogIn': (context) => LogInPage(),
         '/SignUp': (context) => SignUpPage(),
+        '/HomePage': (context) => HomePage(),
       },
       initialRoute: '/LogIn',
       title: "Dog Catcher App",
