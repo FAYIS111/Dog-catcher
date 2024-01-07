@@ -1,4 +1,5 @@
 import 'package:dog_catcher/pages/LogInPage.dart';
+import 'package:dog_catcher/pages/SignUpPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ void main() {
     MaterialApp(
       routes: {
         '/LogIn': (context) => LogInPage(),
+        '/SignUp': (context) => SignUpPage(),
       },
       initialRoute: '/LogIn',
       title: "Dog Catcher App",

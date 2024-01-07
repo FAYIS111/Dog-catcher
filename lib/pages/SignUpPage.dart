@@ -3,33 +3,31 @@ import 'package:dog_catcher/widgets/Asset.dart';
 import 'package:dog_catcher/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
-class LogInPage extends StatefulWidget {
-  const LogInPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LogInPage> createState() => _LogInPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LogInPageState extends State<LogInPage> {
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                color: Colors.white,
                 width: double.infinity,
                 height: 350,
                 child: Image.asset(
-                  Logo4,
+                  Logo3,
                   fit: BoxFit.cover,
                 ),
               ),
               AppTextField(
-                labelText: "USER NAME/EMAIL",
+                labelText: "EMAIL",
                 keyBoardType: TextInputType.name,
               ),
               AppTextField(
@@ -37,14 +35,8 @@ class _LogInPageState extends State<LogInPage> {
                 keyBoardType: TextInputType.number,
               ),
               appButton(
-                buttonText: "LOG IN",
-                buttonAction: () {},
-              ),
-              appButton(
                 buttonText: "SIGN UP",
-                buttonAction: () {
-                  Navigator.pushNamed(context, '/SignUp');
-                },
+                buttonAction: () {},
               ),
             ],
           ),
