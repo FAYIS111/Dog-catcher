@@ -63,6 +63,9 @@ flutter:
     - assets/Logos/
     - assets/MainPics/
     - assets/NormalPics/
+    - assets/NormalPics/dogPic1.jpeg
+    - assets/NormalPics/dogGallary.jpeg
+    - assets/NormalPics/strayDog3.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
