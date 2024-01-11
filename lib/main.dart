@@ -3,6 +3,7 @@ import 'package:dog_catcher/pages/LocationPage.dart';
 import 'package:dog_catcher/pages/LogInPage.dart';
 import 'package:dog_catcher/pages/ReportPage.dart';
 import 'package:dog_catcher/pages/SignUpPage.dart';
+import 'package:dog_catcher/pages/finalPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ void main() {
         '/CommonPage': (context) => CommonPage(),
         '/ReportPage': (context) => ReportPage(),
         '/LocationPage': (context) => LocationPage(),
+        '/FinalPage': (context) => FinalPage(),
       },
       initialRoute: '/LogIn',
       title: "Dog Catcher App",

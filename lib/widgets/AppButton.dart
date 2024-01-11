@@ -10,7 +10,7 @@ Widget appButton({
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
-      color: Colors.white,
+      color: Colors.grey.shade300,
       width: width,
       height: height,
       child: ElevatedButton(

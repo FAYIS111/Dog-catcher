@@ -1,3 +1,6 @@
+import 'package:dog_catcher/widgets/AppButton.dart';
+import 'package:dog_catcher/widgets/TextField.dart';
+import 'package:flutter/gestures.dart';
 import "package:flutter/material.dart";
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -61,28 +64,107 @@ class _LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Wrap(
         children: [
-          Text(locationMessage),
-          ElevatedButton(
-            onPressed: () {
-              _getCurrentLocation().then((value) {
-                lat = '${value.latitude}';
-                long = '${value.longitude}';
-                setState(() {
-                  locationMessage = 'Latitude: $lat , Longitude: $long';
-                });
-                _liveLocation();
-              });
-            },
-            child: Text('Get current location'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              _openMap(lat, long);
-            },
-            child: Text('open the google map'),
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  bottom: 20,
+                  left: 6,
+                  right: 6,
+                ),
+                child: AppTextField(
+                  maxLine: 15,
+                  labelText: "REPORT INCIDENT",
+                  keyBoardType: TextInputType.name,
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
+                  left: 6,
+                  right: 6,
+                ),
+                child: Container(
+                  width: double.infinity,
+                  color: Colors.grey.shade300,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.yellow,
+                            border: Border.all(
+                              color: Colors.purple,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(115),
+                              bottomLeft: Radius.circular(10),
+                              topRight: Radius.circular(15),
+                              bottomRight: Radius.circular(110),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                spreadRadius: 7,
+                                blurRadius: 15,
+                                offset: Offset(10, 5),
+                              ),
+                            ],
+                          ),
+                          width: 350,
+                          height: 150,
+                          child: Center(
+                            child: Text(locationMessage),
+                          ),
+                        ),
+                      ),
+                      appButton(
+                          color: MaterialStateProperty.all(Colors.greenAccent),
+                          buttonText: "GET CURRENT LOCATION",
+                          buttonAction: () {
+                            _getCurrentLocation().then((value) {
+                              lat = '${value.latitude}';
+                              long = '${value.longitude}';
+                              setState(() {
+                                locationMessage =
+                                    'Latitude: $lat , Longitude: $long';
+                              });
+                              _liveLocation();
+                            });
+                          }),
+                      appButton(
+                          color: MaterialStateProperty.all(Colors.greenAccent),
+                          buttonText: "OPEN THE GOOGLE MAP",
+                          buttonAction: () {
+                            _openMap(lat, long);
+                          }),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              appButton(
+                width: 150,
+                height: 70,
+                color: MaterialStateProperty.all(Colors.purple),
+                buttonText: "SUBMIT",
+                buttonAction: () {
+                  Navigator.pushNamed(context, '/FinalPage');
+                },
+              ),
+            ],
           ),
         ],
       ),

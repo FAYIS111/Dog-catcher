@@ -18,23 +18,39 @@ class _LogInPageState extends State<LogInPage> {
         color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                color: Colors.white,
-                width: double.infinity,
-                height: 350,
-                child: Image.asset(
-                  Logo4,
-                  fit: BoxFit.cover,
+              SizedBox(
+                height: 70,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 350,
+                  child: Image.asset(
+                    Logo4,
+                    fit: BoxFit.contain,
+                  ),
                 ),
+              ),
+              SizedBox(
+                height: 40,
               ),
               AppTextField(
                 labelText: "USER NAME/EMAIL",
                 keyBoardType: TextInputType.name,
               ),
+              SizedBox(
+                height: 20,
+              ),
               AppTextField(
                 labelText: "PASSWORD",
                 keyBoardType: TextInputType.number,
+              ),
+              SizedBox(
+                height: 80,
               ),
               appButton(
                 width: 200,

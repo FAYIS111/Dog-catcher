@@ -4,11 +4,13 @@ class AppTextField extends StatefulWidget {
   final String labelText;
   final TextInputType? keyBoardType;
   final int? maxLength;
+  final int? maxLine;
   const AppTextField({
     Key? key,
     required this.labelText,
     this.maxLength,
     required this.keyBoardType,
+    this.maxLine,
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class _AppTextFieldState extends State<AppTextField> {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: TextField(
+        maxLines: widget.maxLine,
         keyboardType: widget.keyBoardType,
         maxLength: widget.maxLength,
         decoration: InputDecoration(

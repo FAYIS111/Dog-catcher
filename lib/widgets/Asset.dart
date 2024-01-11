@@ -1,5 +1,5 @@
 //assets
-
+String noImage = 'assets/pics/NoImage.jpeg';
 //Logos
 String Logo1 = 'assets/Logos/dogPic1.jpeg';
 String Logo2 = 'assets/Logos/dogPic2.jpeg';

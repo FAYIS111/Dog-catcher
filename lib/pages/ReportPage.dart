@@ -31,61 +31,63 @@ class _ReportPageState extends State<ReportPage> {
         ),
       ),
       body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 20.0),
-            imageFile == null
-                ? Image.asset(
-                    Logo1,
-                    height: 300.0,
-                    width: 300.0,
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: double.infinity,
-                      height: 300,
-                      child: Card(
-                        shadowColor: Colors.grey,
-                        elevation: 14,
-                        child: Image.file(
-                          imageFile!,
-                          height: 300.0,
-                          width: 300.0,
-                          fit: BoxFit.fill,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              appButton(
+                color: MaterialStateProperty.all(Colors.orange),
+                width: 150,
+                height: 50,
+                buttonText: "SELECT IMAGE",
+                buttonAction: () async {
+                  Map<Permission, PermissionStatus> statuses = await [
+                    Permission.storage,
+                    Permission.camera,
+                  ].request();
+                  if (statuses[Permission.storage]!.isGranted &&
+                      statuses[Permission.camera]!.isGranted) {
+                    showImagePicker(context);
+                  } else {
+                    print('no permission provided');
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              imageFile == null
+                  ? Image.asset(
+                      noImage,
+                      height: 500.0,
+                      width: 400.0,
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        height: 600,
+                        child: Card(
+                          shadowColor: Colors.grey,
+                          elevation: 14,
+                          child: Image.file(
+                            imageFile!,
+                            height: 300.0,
+                            width: 300.0,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-            const SizedBox(height: 20.0),
-            appButton(
-              color: MaterialStateProperty.all(Colors.greenAccent),
-              width: 150,
-              height: 50,
-              buttonText: "SELECT IMAGE",
-              buttonAction: () async {
-                Map<Permission, PermissionStatus> statuses = await [
-                  Permission.storage,
-                  Permission.camera,
-                ].request();
-                if (statuses[Permission.storage]!.isGranted &&
-                    statuses[Permission.camera]!.isGranted) {
-                  showImagePicker(context);
-                } else {
-                  print('no permission provided');
-                }
-              },
-            ),
-            appButton(
-              color: MaterialStateProperty.all(Colors.greenAccent),
-              width: 150,
-              height: 50,
-              buttonText: "NEXT",
-              buttonAction: () {
-                Navigator.pushNamed(context, '/LocationPage');
-              },
-            ),
-          ],
+              const SizedBox(height: 20.0),
+              appButton(
+                color: MaterialStateProperty.all(Colors.greenAccent),
+                width: 150,
+                height: 50,
+                buttonText: "NEXT",
+                buttonAction: () {
+                  Navigator.pushNamed(context, '/LocationPage');
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
