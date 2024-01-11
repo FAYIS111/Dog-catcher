@@ -1,4 +1,5 @@
 import 'package:dog_catcher/pages/CommonPage.dart';
+import 'package:dog_catcher/pages/LocationPage.dart';
 import 'package:dog_catcher/pages/LogInPage.dart';
 import 'package:dog_catcher/pages/ReportPage.dart';
 import 'package:dog_catcher/pages/SignUpPage.dart';
@@ -14,6 +15,7 @@ void main() {
         '/HomePage': (context) => HomePage(),
         '/CommonPage': (context) => CommonPage(),
         '/ReportPage': (context) => ReportPage(),
+        '/LocationPage': (context) => LocationPage(),
       },
       initialRoute: '/LogIn',
       title: "Dog Catcher App",

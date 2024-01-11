@@ -80,8 +80,10 @@ class _ReportPageState extends State<ReportPage> {
               color: MaterialStateProperty.all(Colors.greenAccent),
               width: 150,
               height: 50,
-              buttonText: "REPORT",
-              buttonAction: () {},
+              buttonText: "NEXT",
+              buttonAction: () {
+                Navigator.pushNamed(context, '/LocationPage');
+              },
             ),
           ],
         ),
