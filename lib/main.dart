@@ -6,8 +6,14 @@ import 'package:dog_catcher/pages/SignUpPage.dart';
 import 'package:dog_catcher/pages/finalPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
 import 'package:flutter/material.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MaterialApp(
       routes: {

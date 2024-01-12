@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "130796918978",
+    "project_id": "straydog-catcher",
+    "storage_bucket": "straydog-catcher.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130796918978:android:587ec02be27a305cd0035b",
+        "android_client_info": {
+          "package_name": "com.example.dog_catcher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlN9BGcrVluwzS83CMin7CnLF-CfYDu5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

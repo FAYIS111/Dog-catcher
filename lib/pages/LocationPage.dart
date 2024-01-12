@@ -161,7 +161,7 @@ class _LocationPageState extends State<LocationPage> {
                 color: MaterialStateProperty.all(Colors.purple),
                 buttonText: "SUBMIT",
                 buttonAction: () {
-                  Navigator.pushNamed(context, '/FinalPage');
+                  Navigator.pushNamed(context, '/UploadPage');
                 },
               ),
             ],

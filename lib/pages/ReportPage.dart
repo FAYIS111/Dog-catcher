@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/Asset.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -14,7 +15,27 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
-  File? imageFile;
+  PlatformFile? pickedFile;
+
+  Future uploadFile() async {
+    try {
+      if (pickedFile != null) {
+        final path = 'files/${pickedFile!.name}';
+        final file = File(pickedFile!.path!);
+        final ref = FirebaseStorage.instance.ref().child(path);
+
+        // Upload file to Firebase Storage
+        await ref.putFile(file);
+
+        // Add further processing or navigate to the next screen here
+        print('File Uploaded Successfully');
+      } else {
+        print('No file selected');
+      }
+    } catch (e) {
+      print('Error uploading file: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +43,7 @@ class _ReportPageState extends State<ReportPage> {
       appBar: AppBar(
         backgroundColor: Colors.greenAccent,
         title: Text(
-          'SELECT & CROP IMAGE',
+          'SELECT IMAGE',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -48,12 +69,12 @@ class _ReportPageState extends State<ReportPage> {
                       statuses[Permission.camera]!.isGranted) {
                     showImagePicker(context);
                   } else {
-                    print('no permission provided');
+                    print('No permission provided');
                   }
                 },
               ),
               const SizedBox(height: 20.0),
-              imageFile == null
+              pickedFile == null
                   ? Image.asset(
                       noImage,
                       height: 500.0,
@@ -68,10 +89,9 @@ class _ReportPageState extends State<ReportPage> {
                           shadowColor: Colors.grey,
                           elevation: 14,
                           child: Image.file(
-                            imageFile!,
-                            height: 300.0,
-                            width: 300.0,
-                            fit: BoxFit.fill,
+                            File(pickedFile!.path!),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -83,7 +103,10 @@ class _ReportPageState extends State<ReportPage> {
                 height: 50,
                 buttonText: "NEXT",
                 buttonAction: () {
-                  Navigator.pushNamed(context, '/LocationPage');
+                  setState(() {
+                    uploadFile();
+                    Navigator.pushNamed(context, '/LocationPage');
+                  });
                 },
               ),
             ],
@@ -97,126 +120,100 @@ class _ReportPageState extends State<ReportPage> {
 
   void showImagePicker(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        builder: (builder) {
-          return Card(
-            child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 5.2,
-                margin: const EdgeInsets.only(top: 8.0),
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: InkWell(
+      context: context,
+      builder: (builder) {
+        return Card(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 5.2,
+            margin: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.all(12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    child: Column(
+                      children: const [
+                        Icon(
+                          Icons.image,
+                          size: 60.0,
+                        ),
+                        SizedBox(height: 12.0),
+                        Text(
+                          "Gallery",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        )
+                      ],
+                    ),
+                    onTap: () {
+                      selectFile();
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: InkWell(
+                    child: SizedBox(
                       child: Column(
                         children: const [
                           Icon(
-                            Icons.image,
+                            Icons.camera_alt,
                             size: 60.0,
                           ),
                           SizedBox(height: 12.0),
                           Text(
-                            "Gallery",
+                            "Camera",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontSize: 16, color: Colors.black),
                           )
                         ],
                       ),
-                      onTap: () {
-                        _imgFromGallery();
-                        Navigator.pop(context);
-                      },
-                    )),
-                    Expanded(
-                        child: InkWell(
-                      child: SizedBox(
-                        child: Column(
-                          children: const [
-                            Icon(
-                              Icons.camera_alt,
-                              size: 60.0,
-                            ),
-                            SizedBox(height: 12.0),
-                            Text(
-                              "Camera",
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            )
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        _imgFromCamera();
-                        Navigator.pop(context);
-                      },
-                    ))
-                  ],
-                )),
-          );
-        });
+                    ),
+                    onTap: () {
+                      _imgFromCamera();
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
-  _imgFromGallery() async {
-    await picker
-        .pickImage(source: ImageSource.gallery, imageQuality: 50)
-        .then((value) {
-      if (value != null) {
-        _cropImage(File(value.path));
-      }
-    });
+  Future selectFile() async {
+    try {
+      final result = await FilePicker.platform.pickFiles();
+      if (result == null) return;
+      setState(() {
+        pickedFile = result.files.first;
+      });
+    } catch (e) {
+      print('Error selecting file: $e');
+    }
   }
 
   _imgFromCamera() async {
-    await picker
-        .pickImage(source: ImageSource.camera, imageQuality: 50)
-        .then((value) {
-      if (value != null) {
-        _cropImage(File(value.path));
+    try {
+      final image =
+          await picker.pickImage(source: ImageSource.camera, imageQuality: 50);
+      if (image != null) {
+        final length = await File(image.path!)
+            .length(); // Await the result of the function call
+        setState(() {
+          pickedFile = PlatformFile(
+            name: 'image.jpg',
+            size: length,
+            path: image.path,
+          );
+        });
       }
-    });
-  }
-
-  _cropImage(File imgFile) async {
-    final croppedFile = await ImageCropper().cropImage(
-        sourcePath: imgFile.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        uiSettings: [
-          AndroidUiSettings(
-              toolbarTitle: "Image Cropper",
-              toolbarColor: Colors.deepOrange,
-              toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
-          IOSUiSettings(
-            title: "Image Cropper",
-          )
-        ]);
-    if (croppedFile != null) {
-      imageCache.clear();
-      setState(() {
-        imageFile = File(croppedFile.path);
-      });
-      // reload();
+    } catch (e) {
+      print('Error capturing image: $e');
     }
   }
 }
