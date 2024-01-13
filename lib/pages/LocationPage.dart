@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/TextField.dart';
-import 'package:flutter/gestures.dart';
 import "package:flutter/material.dart";
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 class LocationPage extends StatefulWidget {
   const LocationPage({super.key});
@@ -13,6 +14,18 @@ class LocationPage extends StatefulWidget {
 }
 
 class _LocationPageState extends State<LocationPage> {
+  final CollectionReference dogCollection =
+      FirebaseFirestore.instance.collection('dogCollection');
+  TextEditingController description = TextEditingController();
+
+  void addCollection() {
+    final data = {
+      'location': locationMessage,
+      'description': description.text,
+    };
+    dogCollection.add(data);
+  }
+
   String locationMessage = 'Current location of the user';
   late String lat;
   late String long;
@@ -62,6 +75,27 @@ class _LocationPageState extends State<LocationPage> {
   }
 
   @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    super.initState();
+  }
+
+  showNotification() {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 10,
+        channelKey: 'basic_channel',
+        title: 'Notification for you',
+        body: description.text,
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Wrap(
@@ -76,7 +110,8 @@ class _LocationPageState extends State<LocationPage> {
                   right: 6,
                 ),
                 child: AppTextField(
-                  maxLine: 15,
+                  textController: description,
+                  maxLine: 5,
                   labelText: "REPORT INCIDENT",
                   keyBoardType: TextInputType.name,
                 ),
@@ -161,7 +196,11 @@ class _LocationPageState extends State<LocationPage> {
                 color: MaterialStateProperty.all(Colors.purple),
                 buttonText: "SUBMIT",
                 buttonAction: () {
-                  Navigator.pushNamed(context, '/UploadPage');
+                  setState(() {
+                    showNotification();
+                    addCollection();
+                    Navigator.pushNamed(context, '/FinalPage');
+                  });
                 },
               ),
             ],

@@ -21,7 +21,7 @@ class _LogInPageState extends State<LogInPage> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                height: 70,
+                height: 30,
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
@@ -36,7 +36,7 @@ class _LogInPageState extends State<LogInPage> {
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 30,
               ),
               AppTextField(
                 labelText: "USER NAME/EMAIL",
@@ -50,7 +50,7 @@ class _LogInPageState extends State<LogInPage> {
                 keyBoardType: TextInputType.number,
               ),
               SizedBox(
-                height: 80,
+                height: 10,
               ),
               appButton(
                 width: 200,

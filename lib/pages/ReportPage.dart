@@ -51,67 +51,64 @@ class _ReportPageState extends State<ReportPage> {
           ),
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              appButton(
-                color: MaterialStateProperty.all(Colors.orange),
-                width: 150,
-                height: 50,
-                buttonText: "SELECT IMAGE",
-                buttonAction: () async {
-                  Map<Permission, PermissionStatus> statuses = await [
-                    Permission.storage,
-                    Permission.camera,
-                  ].request();
-                  if (statuses[Permission.storage]!.isGranted &&
-                      statuses[Permission.camera]!.isGranted) {
-                    showImagePicker(context);
-                  } else {
-                    print('No permission provided');
-                  }
-                },
-              ),
-              const SizedBox(height: 20.0),
-              pickedFile == null
-                  ? Image.asset(
-                      noImage,
-                      height: 500.0,
-                      width: 400.0,
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          appButton(
+            color: MaterialStateProperty.all(Colors.orange),
+            width: 150,
+            height: 50,
+            buttonText: "SELECT IMAGE",
+            buttonAction: () async {
+              Map<Permission, PermissionStatus> statuses = await [
+                Permission.storage,
+                Permission.camera,
+              ].request();
+              if (statuses[Permission.storage]!.isGranted &&
+                  statuses[Permission.camera]!.isGranted) {
+                showImagePicker(context);
+              } else {
+                print('No permission provided');
+              }
+            },
+          ),
+          const SizedBox(height: 20.0),
+          pickedFile == null
+              ? Image.asset(
+                  noImage,
+                  height: 300.0,
+                  width: 400.0,
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: double.infinity,
+                    height: 400,
+                    child: Card(
+                      shadowColor: Colors.grey,
+                      elevation: 14,
+                      child: Image.file(
+                        File(pickedFile!.path!),
                         width: double.infinity,
-                        height: 600,
-                        child: Card(
-                          shadowColor: Colors.grey,
-                          elevation: 14,
-                          child: Image.file(
-                            File(pickedFile!.path!),
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        fit: BoxFit.cover,
                       ),
                     ),
-              const SizedBox(height: 20.0),
-              appButton(
-                color: MaterialStateProperty.all(Colors.greenAccent),
-                width: 150,
-                height: 50,
-                buttonText: "NEXT",
-                buttonAction: () {
-                  setState(() {
-                    uploadFile();
-                    Navigator.pushNamed(context, '/LocationPage');
-                  });
-                },
-              ),
-            ],
+                  ),
+                ),
+          const SizedBox(height: 10.0),
+          appButton(
+            color: MaterialStateProperty.all(Colors.greenAccent),
+            width: 150,
+            height: 50,
+            buttonText: "NEXT",
+            buttonAction: () {
+              setState(() {
+                uploadFile();
+                Navigator.pushNamed(context, '/LocationPage');
+              });
+            },
           ),
-        ),
+        ],
       ),
     );
   }
