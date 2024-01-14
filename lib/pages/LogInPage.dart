@@ -1,7 +1,11 @@
+import 'package:dog_catcher/pages/SignUpPage.dart';
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/Asset.dart';
 import 'package:dog_catcher/widgets/TextField.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:dog_catcher/pages/WrapperPage.dart';
 
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
@@ -11,18 +15,51 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  Future<void> logIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email.text,
+        password: password.text,
+      );
+      Get.offAll(Wrapper());
+      // Sign-in successful, navigate to the next screen or perform necessary actions.
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        // Handle specific Firebase Authentication exceptions here
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sign In Failed'),
+              content: Text('${e.message}'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Handle other exceptions here
+        print('Error occurred: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Container(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 30,
-              ),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Container(
@@ -38,16 +75,22 @@ class _LogInPageState extends State<LogInPage> {
               SizedBox(
                 height: 30,
               ),
-              AppTextField(
-                labelText: "USER NAME/EMAIL",
-                keyBoardType: TextInputType.name,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              AppTextField(
-                labelText: "PASSWORD",
-                keyBoardType: TextInputType.number,
+              Column(
+                children: [
+                  AppTextField(
+                    textController: email,
+                    labelText: "USER NAME/EMAIL",
+                    keyBoardType: TextInputType.name,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    textController: password,
+                    labelText: "PASSWORD",
+                    keyBoardType: TextInputType.number,
+                  ),
+                ],
               ),
               SizedBox(
                 height: 10,
@@ -58,7 +101,7 @@ class _LogInPageState extends State<LogInPage> {
                 color: MaterialStateProperty.all(Colors.greenAccent),
                 buttonText: "LOG IN",
                 buttonAction: () {
-                  Navigator.pushNamed(context, '/HomePage');
+                  logIn();
                 },
               ),
               appButton(
@@ -67,7 +110,9 @@ class _LogInPageState extends State<LogInPage> {
                 color: MaterialStateProperty.all(Colors.greenAccent),
                 buttonText: "SIGN UP",
                 buttonAction: () {
-                  Navigator.pushNamed(context, '/SignUp');
+                  setState(() {
+                    Get.to(SignUpPage());
+                  });
                 },
               ),
             ],

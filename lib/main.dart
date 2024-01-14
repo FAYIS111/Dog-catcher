@@ -3,9 +3,11 @@ import 'package:dog_catcher/pages/LocationPage.dart';
 import 'package:dog_catcher/pages/LogInPage.dart';
 import 'package:dog_catcher/pages/ReportPage.dart';
 import 'package:dog_catcher/pages/SignUpPage.dart';
+import 'package:dog_catcher/pages/WrapperPage.dart';
 import 'package:dog_catcher/pages/finalPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -30,7 +32,7 @@ Future<void> main() async {
   );
 
   runApp(
-    MaterialApp(
+    GetMaterialApp(
       routes: {
         '/LogIn': (context) => LogInPage(),
         '/SignUp': (context) => SignUpPage(),
@@ -40,9 +42,9 @@ Future<void> main() async {
         '/LocationPage': (context) => LocationPage(),
         '/FinalPage': (context) => FinalPage(),
       },
-      initialRoute: '/LogIn',
+      initialRoute: '/HomePage',
       title: "Dog Catcher App",
-      home: HomePage(),
+      home: Wrapper(),
     ),
   );
 }

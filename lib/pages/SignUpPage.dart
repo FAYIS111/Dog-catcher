@@ -1,7 +1,10 @@
+import 'package:dog_catcher/pages/WrapperPage.dart';
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/Asset.dart';
 import 'package:dog_catcher/widgets/TextField.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -11,6 +14,43 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  Future<void> signUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email.text,
+        password: password.text,
+      );
+      // If sign-up is successful, navigate to the Wrapper or next screen
+      Get.offAll(Wrapper());
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        // Handle specific Firebase Authentication exceptions here
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sign Up Failed'),
+              content: Text('${e.message}'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Handle other exceptions here
+        print('Error occurred: $e');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,10 +67,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               AppTextField(
+                textController: email,
                 labelText: "EMAIL",
                 keyBoardType: TextInputType.name,
               ),
               AppTextField(
+                textController: password,
                 labelText: "PASSWORD",
                 keyBoardType: TextInputType.number,
               ),
@@ -39,7 +81,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 height: 50,
                 color: MaterialStateProperty.all(Colors.greenAccent),
                 buttonText: "SIGN UP",
-                buttonAction: () {},
+                buttonAction: () {
+                  setState(() {
+                    signUp();
+                  });
+                },
               ),
             ],
           ),
