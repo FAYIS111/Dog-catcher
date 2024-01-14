@@ -1,6 +1,7 @@
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/Asset.dart';
 import 'package:dog_catcher/widgets/BottomNavigationBar.dart';
+import 'package:dog_catcher/widgets/CarousalScreen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5),
               child: Container(
                 width: double.infinity,
-                height: 100,
+                height: 50,
                 color: Colors.yellow,
                 child: Center(
                   child: Text('Notification'),

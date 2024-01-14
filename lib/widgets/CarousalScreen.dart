@@ -34,7 +34,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 250,
+          height: 200,
           width: MediaQuery.of(context).size.width,
           child: PageView.builder(
               controller: _pageController,

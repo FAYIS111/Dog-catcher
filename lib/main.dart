@@ -1,8 +1,10 @@
 import 'package:dog_catcher/pages/CommonPage.dart';
 import 'package:dog_catcher/pages/LocationPage.dart';
 import 'package:dog_catcher/pages/LogInPage.dart';
+import 'package:dog_catcher/pages/NormalDogGallary.dart';
 import 'package:dog_catcher/pages/ReportPage.dart';
 import 'package:dog_catcher/pages/SignUpPage.dart';
+import 'package:dog_catcher/pages/StrayDogGallary.dart';
 import 'package:dog_catcher/pages/WrapperPage.dart';
 import 'package:dog_catcher/pages/finalPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
@@ -41,6 +43,8 @@ Future<void> main() async {
         '/ReportPage': (context) => ReportPage(),
         '/LocationPage': (context) => LocationPage(),
         '/FinalPage': (context) => FinalPage(),
+        '/StrayDog': (context) => StrayDogGallary(),
+        '/NormalDog': (context) => NormalDogGallary(),
       },
       initialRoute: '/HomePage',
       title: "Dog Catcher App",

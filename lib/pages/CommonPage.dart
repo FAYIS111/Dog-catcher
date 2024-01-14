@@ -28,17 +28,17 @@ class _CommonPageState extends State<CommonPage> {
               cardText: "STRAY DOG GALLARY",
               cardImage: normal3,
               fit: BoxFit.fill,
-              clickAction: () {},
+              clickAction: () {
+                Navigator.pushNamed(context, '/StrayDog');
+              },
             ),
             CommonPageCard(
               cardText: "NORMAL DOGS GALLARY",
               cardImage: normal1,
               fit: BoxFit.cover,
-              clickAction: () {},
-            ),
-            Container(
-              height: 700,
-              color: Colors.orange,
+              clickAction: () {
+                Navigator.pushNamed(context, '/NormalDog');
+              },
             ),
           ],
         ),
