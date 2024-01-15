@@ -52,7 +52,7 @@ Future<void> main() async {
         '/Instruction': (context) => const InstructionPage(),
         '/CartPage': (context) => const CartPage(),
       },
-      initialRoute: '/HomePage',
+      initialRoute: '/LogIn',
       title: "Dog Catcher App",
       home: const Wrapper(),
     ),
