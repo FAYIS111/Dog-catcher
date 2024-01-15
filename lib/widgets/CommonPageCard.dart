@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CommonPageCard extends StatefulWidget {
   final String cardText;
   final String cardImage;
@@ -32,12 +33,13 @@ class _CommonPageCardState extends State<CommonPageCard> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
+                  color: Colors.white,
                   child: Column(
                     children: [
-                      Text("Click Here"),
+                      const Text("Click Here"),
                       Text(
                         widget.cardText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.purple,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,

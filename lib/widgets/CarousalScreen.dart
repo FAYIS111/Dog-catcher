@@ -21,10 +21,11 @@ class _CarouselScreenState extends State<CarouselScreen> {
   }
 
   void autoScroll() {
-    Timer.periodic(Duration(seconds: 3), (timer) {
+    Timer.periodic(const Duration(seconds: 3), (timer) {
       if (mounted) {
         _pageController.nextPage(
-            duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut);
       }
     });
   }
@@ -53,7 +54,7 @@ class _CarouselScreenState extends State<CarouselScreen> {
                 return slider(widget.photos, pageposition, active);
               }),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Row(
@@ -89,7 +90,7 @@ List<Widget> imageIndicator(imagesLength, currentIndex) {
     return Container(
       height: 10,
       width: 15,
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: currentIndex == index * 1000 ? Colors.black : Colors.grey),

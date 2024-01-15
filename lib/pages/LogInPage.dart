@@ -23,23 +23,24 @@ class _LogInPageState extends State<LogInPage> {
         email: email.text,
         password: password.text,
       );
-      Get.offAll(Wrapper());
+      Get.offAll(const Wrapper());
       // Sign-in successful, navigate to the next screen or perform necessary actions.
     } catch (e) {
       if (e is FirebaseAuthException) {
         // Handle specific Firebase Authentication exceptions here
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Sign In Failed'),
+              title: const Text('Sign In Failed'),
               content: Text('${e.message}'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -57,6 +58,7 @@ class _LogInPageState extends State<LogInPage> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -65,34 +67,38 @@ class _LogInPageState extends State<LogInPage> {
                 child: Container(
                   color: Colors.white,
                   width: double.infinity,
-                  height: 350,
+                  height: MediaQuery.of(context).size.height * .4,
                   child: Image.asset(
                     Logo4,
                     fit: BoxFit.contain,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 30,
+              const SizedBox(
+                height: 15,
               ),
-              Column(
-                children: [
-                  AppTextField(
-                    textController: email,
-                    labelText: "USER NAME/EMAIL",
-                    keyBoardType: TextInputType.name,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  AppTextField(
-                    textController: password,
-                    labelText: "PASSWORD",
-                    keyBoardType: TextInputType.number,
-                  ),
-                ],
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * .3,
+                child: Column(
+                  children: [
+                    AppTextField(
+                      textController: email,
+                      labelText: "USER NAME/EMAIL",
+                      keyBoardType: TextInputType.name,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    AppTextField(
+                      textController: password,
+                      labelText: "PASSWORD",
+                      keyBoardType: TextInputType.number,
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               appButton(
@@ -111,7 +117,7 @@ class _LogInPageState extends State<LogInPage> {
                 buttonText: "SIGN UP",
                 buttonAction: () {
                   setState(() {
-                    Get.to(SignUpPage());
+                    Get.to(const SignUpPage());
                   });
                 },
               ),

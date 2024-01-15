@@ -16,6 +16,7 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
   Future<void> signUp() async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -27,18 +28,19 @@ class _SignUpPageState extends State<SignUpPage> {
     } catch (e) {
       if (e is FirebaseAuthException) {
         // Handle specific Firebase Authentication exceptions here
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Sign Up Failed'),
+              title: const Text('Sign Up Failed'),
               content: Text('${e.message}'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -55,26 +57,36 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        color: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
+                color: Colors.white,
                 width: double.infinity,
-                height: 350,
+                height: MediaQuery.of(context).size.height * .4,
                 child: Image.asset(
                   Logo3,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
-              AppTextField(
-                textController: email,
-                labelText: "EMAIL",
-                keyBoardType: TextInputType.name,
-              ),
-              AppTextField(
-                textController: password,
-                labelText: "PASSWORD",
-                keyBoardType: TextInputType.number,
+              Container(
+                color: Colors.white,
+                height: MediaQuery.of(context).size.height * .3,
+                child: Column(
+                  children: [
+                    AppTextField(
+                      textController: email,
+                      labelText: "EMAIL",
+                      keyBoardType: TextInputType.name,
+                    ),
+                    AppTextField(
+                      textController: password,
+                      labelText: "PASSWORD",
+                      keyBoardType: TextInputType.number,
+                    ),
+                  ],
+                ),
               ),
               appButton(
                 width: 200,

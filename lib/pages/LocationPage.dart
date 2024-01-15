@@ -17,11 +17,12 @@ class _LocationPageState extends State<LocationPage> {
   final CollectionReference dogCollection =
       FirebaseFirestore.instance.collection('dogCollection');
   TextEditingController description = TextEditingController();
-
+  TextEditingController contactNo = TextEditingController();
   void addCollection() {
     final data = {
       'location': locationMessage,
       'description': description.text,
+      'contactNo': contactNo.text,
     };
     dogCollection.add(data);
   }
@@ -51,7 +52,7 @@ class _LocationPageState extends State<LocationPage> {
 
   //Listen to location updates
   void _liveLocation() {
-    LocationSettings locationSettings = LocationSettings(
+    LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 100,
     );
@@ -103,8 +104,8 @@ class _LocationPageState extends State<LocationPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                top: 10,
-                bottom: 10,
+                top: 5,
+                bottom: 5,
                 left: 6,
                 right: 6,
               ),
@@ -124,13 +125,13 @@ class _LocationPageState extends State<LocationPage> {
                             color: Colors.purple,
                             width: 2,
                           ),
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(115),
                             bottomLeft: Radius.circular(10),
                             topRight: Radius.circular(15),
                             bottomRight: Radius.circular(110),
                           ),
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.grey,
                               spreadRadius: 7,
@@ -172,12 +173,13 @@ class _LocationPageState extends State<LocationPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                top: 20,
-                bottom: 20,
+                top: 5,
+                bottom: 5,
                 left: 6,
                 right: 6,
               ),
               child: Container(
+                color: Colors.white,
                 width: double.infinity,
                 height: MediaQuery.of(context).size.height * .2,
                 child: AppTextField(
@@ -188,6 +190,10 @@ class _LocationPageState extends State<LocationPage> {
                 ),
               ),
             ),
+            AppTextField(
+                textController: contactNo,
+                labelText: "CONTACT NUMBER",
+                keyBoardType: TextInputType.number),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: appButton(

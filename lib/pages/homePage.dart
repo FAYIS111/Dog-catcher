@@ -1,9 +1,10 @@
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/Asset.dart';
 import 'package:dog_catcher/widgets/BottomNavigationBar.dart';
-import 'package:dog_catcher/widgets/CarousalScreen.dart';
+import 'package:dog_catcher/widgets/HomePageCard.dart';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,6 +14,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final Uri _url = Uri.parse('https://ahd.kerala.gov.in/index.php/contact');
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,18 +29,24 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(5),
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                color: Colors.yellow,
-                child: Center(
-                  child: Text('Notification'),
+            Column(
+              children: [
+                HomePageCard(
+                  buttonText: "HELP CENTER",
+                  buttonAction: () {
+                    _launchUrl();
+                  },
                 ),
-              ),
+                HomePageCard(
+                  buttonText: 'INSTRUCTIONS',
+                  buttonAction: () {
+                    Navigator.pushNamed(context, '/Instruction');
+                  },
+                ),
+              ],
             ),
             Container(
+              color: Colors.white,
               width: double.infinity,
               height: 300,
               child: Image.asset(Logo5),
@@ -49,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigation(),
+      bottomNavigationBar: const BottomNavigation(),
     );
   }
 }

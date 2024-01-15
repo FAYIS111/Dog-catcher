@@ -22,7 +22,7 @@ Widget appButton({
         onPressed: buttonAction,
         child: Text(
           buttonText,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 17,
             fontWeight: FontWeight.bold,

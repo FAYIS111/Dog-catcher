@@ -12,7 +12,8 @@ class NormalDogGallaryCard extends StatelessWidget {
         shadowColor: Colors.grey,
         elevation: 10,
         child: Container(
-          height: 300,
+          color: Colors.white,
+          height: 550,
           child: Image.asset(cardPic),
         ),
       ),

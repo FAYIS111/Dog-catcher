@@ -1,3 +1,4 @@
+import 'package:dog_catcher/pages/AdminPanal.dart';
 import 'package:dog_catcher/pages/CommonPage.dart';
 import 'package:dog_catcher/pages/LocationPage.dart';
 import 'package:dog_catcher/pages/LogInPage.dart';
@@ -8,6 +9,7 @@ import 'package:dog_catcher/pages/StrayDogGallary.dart';
 import 'package:dog_catcher/pages/WrapperPage.dart';
 import 'package:dog_catcher/pages/finalPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
+import 'package:dog_catcher/pages/instructionPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'firebase_options.dart';
@@ -36,19 +38,21 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       routes: {
-        '/LogIn': (context) => LogInPage(),
-        '/SignUp': (context) => SignUpPage(),
-        '/HomePage': (context) => HomePage(),
-        '/CommonPage': (context) => CommonPage(),
-        '/ReportPage': (context) => ReportPage(),
-        '/LocationPage': (context) => LocationPage(),
-        '/FinalPage': (context) => FinalPage(),
-        '/StrayDog': (context) => StrayDogGallary(),
-        '/NormalDog': (context) => NormalDogGallary(),
+        '/LogIn': (context) => const LogInPage(),
+        '/SignUp': (context) => const SignUpPage(),
+        '/HomePage': (context) => const HomePage(),
+        '/CommonPage': (context) => const CommonPage(),
+        '/ReportPage': (context) => const ReportPage(),
+        '/LocationPage': (context) => const LocationPage(),
+        '/FinalPage': (context) => const FinalPage(),
+        '/StrayDog': (context) => const StrayDogGallary(),
+        '/NormalDog': (context) => const NormalDogGallary(),
+        '/AdminPanal': (context) => const AdminPanel(),
+        '/Instruction': (context) => const InstructionPage(),
       },
-      initialRoute: '/HomePage',
+      initialRoute: '/LogIn',
       title: "Dog Catcher App",
-      home: Wrapper(),
+      home: const Wrapper(),
     ),
   );
 }

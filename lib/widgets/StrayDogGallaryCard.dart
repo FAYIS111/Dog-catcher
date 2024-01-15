@@ -12,8 +12,9 @@ class StrayDogGallaryCard extends StatelessWidget {
         shadowColor: Colors.grey,
         elevation: 14,
         child: Container(
+          color: Colors.white,
           width: double.infinity,
-          height: 300,
+          height: 550,
           child: Image.asset(
             cardPic,
             fit: BoxFit.cover,

@@ -42,7 +42,7 @@ class _ReportPageState extends State<ReportPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.greenAccent,
-        title: Text(
+        title: const Text(
           'SELECT IMAGE',
           style: TextStyle(
             color: Colors.black,
@@ -66,6 +66,7 @@ class _ReportPageState extends State<ReportPage> {
               ].request();
               if (statuses[Permission.storage]!.isGranted &&
                   statuses[Permission.camera]!.isGranted) {
+                // ignore: use_build_context_synchronously
                 showImagePicker(context);
               } else {
                 print('No permission provided');
@@ -77,7 +78,7 @@ class _ReportPageState extends State<ReportPage> {
               ? Image.asset(
                   noImage,
                   height: 300.0,
-                  width: 400.0,
+                  width: double.infinity,
                 )
               : Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -130,8 +131,8 @@ class _ReportPageState extends State<ReportPage> {
               children: [
                 Expanded(
                   child: InkWell(
-                    child: Column(
-                      children: const [
+                    child: const Column(
+                      children: [
                         Icon(
                           Icons.image,
                           size: 60.0,
@@ -152,9 +153,9 @@ class _ReportPageState extends State<ReportPage> {
                 ),
                 Expanded(
                   child: InkWell(
-                    child: SizedBox(
+                    child: const SizedBox(
                       child: Column(
-                        children: const [
+                        children: [
                           Icon(
                             Icons.camera_alt,
                             size: 60.0,

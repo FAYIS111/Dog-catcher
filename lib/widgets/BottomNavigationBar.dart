@@ -24,7 +24,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             width: 1,
             color: Colors.purple,
           ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(13),
             topRight: Radius.circular(13),
           ),
@@ -33,20 +33,28 @@ class _BottomNavigationState extends State<BottomNavigation> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             iconButton(
-              buttonIcon: Icon(Icons.person_4_rounded),
-              buttonAction: () {},
+              buttonIcon: const Icon(Icons.person_4_rounded),
+              buttonAction: () {
+                Navigator.pushNamed(context, '/Instruction');
+              },
             ),
             iconButton(
-              buttonIcon: Icon(Icons.search),
-              buttonAction: () {},
+              buttonIcon: const Icon(Icons.report),
+              buttonAction: () {
+                Navigator.pushNamed(context, '/ReportPage');
+              },
             ),
             iconButton(
-              buttonIcon: Icon(Icons.notifications),
-              buttonAction: () {},
+              buttonIcon: const Icon(Icons.image),
+              buttonAction: () {
+                Navigator.pushNamed(context, '/StrayDog');
+              },
             ),
             iconButton(
-              buttonIcon: Icon(Icons.explore),
-              buttonAction: () {},
+              buttonIcon: const Icon(Icons.image),
+              buttonAction: () {
+                Navigator.pushNamed(context, '/NormalDog');
+              },
             ),
           ],
         ),
