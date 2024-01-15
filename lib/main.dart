@@ -7,6 +7,7 @@ import 'package:dog_catcher/pages/ReportPage.dart';
 import 'package:dog_catcher/pages/SignUpPage.dart';
 import 'package:dog_catcher/pages/StrayDogGallary.dart';
 import 'package:dog_catcher/pages/WrapperPage.dart';
+import 'package:dog_catcher/pages/cartPage.dart';
 import 'package:dog_catcher/pages/finalPage.dart';
 import 'package:dog_catcher/pages/homePage.dart';
 import 'package:dog_catcher/pages/instructionPage.dart';
@@ -49,8 +50,9 @@ Future<void> main() async {
         '/NormalDog': (context) => const NormalDogGallary(),
         '/AdminPanal': (context) => const AdminPanel(),
         '/Instruction': (context) => const InstructionPage(),
+        '/CartPage': (context) => const CartPage(),
       },
-      initialRoute: '/LogIn',
+      initialRoute: '/HomePage',
       title: "Dog Catcher App",
       home: const Wrapper(),
     ),

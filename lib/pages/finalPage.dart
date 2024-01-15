@@ -66,7 +66,7 @@ class _FinalPageState extends State<FinalPage> {
                 height: 100,
                 buttonText: 'ADMIN PANAL',
                 buttonAction: () {
-                  Navigator.pushNamed(context, '/AdminPanal');
+                  Navigator.pushNamed(context, '/CartPage');
                 },
               ),
             ],
