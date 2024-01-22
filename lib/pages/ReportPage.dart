@@ -1,11 +1,16 @@
 import 'dart:io';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:dog_catcher/widgets/Asset.dart';
+import 'package:dog_catcher/widgets/TextField.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -16,25 +21,109 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   PlatformFile? pickedFile;
+  final CollectionReference dogCollection =
+      FirebaseFirestore.instance.collection('dogCollection');
+  TextEditingController userName = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController contactNo = TextEditingController();
 
-  Future uploadFile() async {
+  String locationMessage = 'Current location of the user';
+  late String lat;
+  late String long;
+
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location Services are disabled');
+    }
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location Permission are denied");
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permently denied, we cannot request');
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void _liveLocation() {
+    LocationSettings locationSettings = const LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 100,
+    );
+    Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position position) {
+      lat = position.latitude.toString();
+      long = position.longitude.toString();
+      setState(() {
+        locationMessage = 'Latitude:$lat , Longitude: $long';
+      });
+    });
+  }
+
+  Future<void> _openMap(String lat, String long) async {
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+    await canLaunchUrlString(googleURL)
+        ? await launchUrlString(googleURL)
+        : throw 'Could not launch $googleURL';
+  }
+
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    super.initState();
+  }
+
+  showNotification() {
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: 10,
+        channelKey: 'basic_channel',
+        title: 'Notification for you',
+        body: description.text,
+      ),
+    );
+  }
+
+  Future<void> uploadFile() async {
     try {
       if (pickedFile != null) {
         final path = 'files/${pickedFile!.name}';
         final file = File(pickedFile!.path!);
         final ref = FirebaseStorage.instance.ref().child(path);
 
-        // Upload file to Firebase Storage
         await ref.putFile(file);
 
-        // Add further processing or navigate to the next screen here
-        print('File Uploaded Successfully');
+        String downloadURL = await ref.getDownloadURL();
+
+        addCollection(downloadURL);
       } else {
         print('No file selected');
       }
     } catch (e) {
       print('Error uploading file: $e');
     }
+  }
+
+  void addCollection(String downloadURL) {
+    final data = {
+      'location': locationMessage,
+      'description': description.text,
+      'contactNo': contactNo.text,
+      'userName': userName.text,
+      'imageURL': downloadURL,
+    };
+
+    dogCollection.add(data);
   }
 
   @override
@@ -51,28 +140,8 @@ class _ReportPageState extends State<ReportPage> {
           ),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: ListView(
         children: [
-          appButton(
-            color: MaterialStateProperty.all(Colors.orange),
-            width: 150,
-            height: 50,
-            buttonText: "SELECT IMAGE",
-            buttonAction: () async {
-              Map<Permission, PermissionStatus> statuses = await [
-                Permission.storage,
-                Permission.camera,
-              ].request();
-              if (statuses[Permission.storage]!.isGranted &&
-                  statuses[Permission.camera]!.isGranted) {
-                // ignore: use_build_context_synchronously
-                showImagePicker(context);
-              } else {
-                print('No permission provided');
-              }
-            },
-          ),
           const SizedBox(height: 20.0),
           pickedFile == null
               ? Image.asset(
@@ -96,17 +165,75 @@ class _ReportPageState extends State<ReportPage> {
                     ),
                   ),
                 ),
+          appButton(
+            color: MaterialStateProperty.all(Colors.orange),
+            width: 150,
+            height: 50,
+            buttonText: "SELECT IMAGE",
+            buttonAction: () async {
+              Map<Permission, PermissionStatus> statuses = await [
+                Permission.storage,
+                Permission.camera,
+              ].request();
+              if (statuses[Permission.storage]!.isGranted &&
+                  statuses[Permission.camera]!.isGranted) {
+                showImagePicker(context);
+              } else {
+                print('No permission provided');
+              }
+            },
+          ),
+          AppTextField(
+            labelText: 'UserName',
+            keyBoardType: TextInputType.name,
+            textController: userName,
+          ),
+          AppTextField(
+            labelText: 'Contact No',
+            keyBoardType: TextInputType.number,
+            textController: contactNo,
+          ),
+          AppTextField(
+            maxLine: 5,
+            labelText: 'Report',
+            keyBoardType: TextInputType.name,
+            textController: description,
+          ),
+          appButton(
+              color: MaterialStateProperty.all(Colors.greenAccent),
+              buttonText: "GET CURRENT LOCATION",
+              buttonAction: () {
+                _getCurrentLocation().then((value) {
+                  lat = '${value.latitude}';
+                  long = '${value.longitude}';
+                  setState(() {
+                    locationMessage = 'Latitude: $lat , Longitude: $long';
+                  });
+                  _liveLocation();
+                });
+              }),
+          appButton(
+              color: MaterialStateProperty.all(Colors.greenAccent),
+              buttonText: "OPEN THE GOOGLE MAP",
+              buttonAction: () {
+                _openMap(lat, long);
+              }),
+          Container(
+            width: double.infinity,
+            height: 150,
+            child: Center(
+              child: Text(locationMessage),
+            ),
+          ),
           const SizedBox(height: 10.0),
           appButton(
             color: MaterialStateProperty.all(Colors.greenAccent),
             width: 150,
             height: 50,
-            buttonText: "NEXT",
+            buttonText: "SUBMIT",
             buttonAction: () {
-              setState(() {
-                uploadFile();
-                Navigator.pushNamed(context, '/LocationPage');
-              });
+              uploadFile();
+              Navigator.pushNamed(context, '/FinalPage');
             },
           ),
         ],

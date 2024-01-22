@@ -38,6 +38,11 @@ class _FinalPageState extends State<FinalPage> {
             children: [
               const Column(
                 children: [
+                  Icon(
+                    Icons.check_box_outlined,
+                    color: Colors.green,
+                    size: 90,
+                  ),
                   Text('THANKS FOR'),
                   Text(
                     'your submission',
@@ -51,23 +56,28 @@ class _FinalPageState extends State<FinalPage> {
               const SizedBox(
                 height: 150,
               ),
-              appButton(
-                color: MaterialStateProperty.all(Colors.greenAccent),
-                width: 150,
-                height: 50,
-                buttonText: "SIGN OUT",
-                buttonAction: () {
-                  signOut();
-                },
-              ),
-              appButton(
-                color: MaterialStateProperty.all(Colors.greenAccent),
-                width: 150,
-                height: 100,
-                buttonText: 'ADMIN PANAL',
-                buttonAction: () {
-                  Navigator.pushNamed(context, '/CartPage');
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  appButton(
+                    color: MaterialStateProperty.all(Colors.greenAccent),
+                    width: 150,
+                    height: 40,
+                    buttonText: "SIGN OUT",
+                    buttonAction: () {
+                      signOut();
+                    },
+                  ),
+                  appButton(
+                    color: MaterialStateProperty.all(Colors.greenAccent),
+                    width: 150,
+                    height: 40,
+                    buttonText: 'ADMIN PANAL',
+                    buttonAction: () {
+                      Navigator.pushNamed(context, '/CartPage');
+                    },
+                  ),
+                ],
               ),
             ],
           ),

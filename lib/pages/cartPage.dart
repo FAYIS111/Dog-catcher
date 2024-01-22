@@ -1,82 +1,119 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dog_catcher/widgets/AppButton.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
-class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+class AdminPanel extends StatefulWidget {
+  const AdminPanel({super.key});
 
   @override
-  State<CartPage> createState() => _CartPageState();
+  State<AdminPanel> createState() => _AdminPanelState();
 }
 
-class _CartPageState extends State<CartPage> {
-  final CollectionReference dogCollection =
+class _AdminPanelState extends State<AdminPanel> {
+  final CollectionReference strayDog =
       FirebaseFirestore.instance.collection('dogCollection');
-  late String lat;
-  late String long;
-
-  Future<void> _openMap(String lat, String long) async {
-    String googleURL =
-        'https://www.google.com/maps/search/?api=1&query=$lat,$long';
-    await canLaunchUrlString(googleURL)
-        ? await launchUrlString(googleURL)
-        : throw 'Could not launch $googleURL';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-          stream: dogCollection.snapshots(),
+          stream: strayDog.snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, Index) {
-                    final DocumentSnapshot donorSnap =
-                        snapshot.data!.docs[Index];
-                    return Column(
-                      children: [
-                        Container(
-                          height: 280,
-                          child: Card(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(donorSnap['description']),
-                                    Text(donorSnap['contactNo'].toString()),
-                                    Text(donorSnap['location']),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    appButton(
-                                      buttonText: 'View google map',
-                                      buttonAction: () {
-                                        _openMap(lat = donorSnap['location'],
-                                            long = donorSnap['location']);
-                                      },
+                    final DocumentSnapshot dogSnap = snapshot.data!.docs[Index];
+                    return Container(
+                      width: double.infinity,
+                      height: 600,
+                      child: Card(
+                        shadowColor: Colors.grey,
+                        elevation: 14,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Contact No :',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    appButton(
-                                      buttonText: 'Gallary',
-                                      buttonAction: () {
-                                        Navigator.pushNamed(
-                                            context, '/AdminPanal');
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(dogSnap['contactNo']),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'User Name :',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(dogSnap['userName']),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Report :',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(dogSnap['description']),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Location :',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(dogSnap['location']),
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 250,
+                                    child: Image.network(
+                                      dogSnap['imageURL'],
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     );
                   });
             }
