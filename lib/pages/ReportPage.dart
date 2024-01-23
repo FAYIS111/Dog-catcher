@@ -233,6 +233,7 @@ class _ReportPageState extends State<ReportPage> {
             buttonText: "SUBMIT",
             buttonAction: () {
               uploadFile();
+              showNotification();
               Navigator.pushNamed(context, '/FinalPage');
             },
           ),

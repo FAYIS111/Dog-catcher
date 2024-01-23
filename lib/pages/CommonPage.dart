@@ -34,7 +34,7 @@ class _CommonPageState extends State<CommonPage> {
               },
             ),
             CommonPageCard(
-              cardText: "NORMAL DOGS GALLARY",
+              cardText: "SUPER DOGS GALLARY",
               cardImage: normal1,
               fit: BoxFit.cover,
               clickAction: () {
