@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dog_catcher/widgets/cartPageCard.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class AdminPanel extends StatefulWidget {
   const AdminPanel({super.key});
@@ -39,9 +37,23 @@ class _AdminPanelState extends State<AdminPanel> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            CartPageCard(
-                                firstName: 'User Name :',
-                                secondName: dogSnap['userName']),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CartPageCard(
+                                    firstName: 'User Name :',
+                                    secondName: dogSnap['userName']),
+                                IconButton(
+                                  onPressed: () {
+                                    deleteItem(dogSnap.id);
+                                  },
+                                  icon: Icon(
+                                    Icons.delete,
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
+                            ),
                             CartPageCard(
                                 firstName: 'Contact No :',
                                 secondName: dogSnap['contactNo']),
@@ -74,7 +86,7 @@ class _AdminPanelState extends State<AdminPanel> {
                                 width: double.infinity,
                                 height: 250,
                                 child: Image.network(
-                                  dogSnap['imageURL'],
+                                  dogSnap['imageURL'] ?? 'N/A',
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -88,5 +100,9 @@ class _AdminPanelState extends State<AdminPanel> {
             return Container();
           }),
     );
+  }
+
+  void deleteItem(docId) {
+    strayDog.doc(docId).delete();
   }
 }

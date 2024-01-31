@@ -6,17 +6,18 @@ Widget appButton({
   MaterialStateProperty<Color?>? color,
   double? width,
   double? height,
+  MaterialStateProperty<double?>? elevation,
 }) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
-      color: Colors.grey.shade300,
+      color: Colors.white,
       width: width,
       height: height,
       child: ElevatedButton(
         style: ButtonStyle(
           shadowColor: MaterialStateProperty.all(Colors.grey),
-          elevation: MaterialStateProperty.all(15),
+          elevation: elevation,
           backgroundColor: color,
         ),
         onPressed: buttonAction,

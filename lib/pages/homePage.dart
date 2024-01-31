@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Card(
+      body: Container(
         color: Colors.white,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -49,7 +49,10 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               width: double.infinity,
               height: 300,
-              child: Image.asset(Logo5),
+              child: Image.asset(
+                Logo5,
+                fit: BoxFit.cover,
+              ),
             ),
             appButton(
               width: 350,

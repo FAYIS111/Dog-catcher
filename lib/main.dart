@@ -36,6 +36,7 @@ Future<void> main() async {
 
   runApp(
     GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       routes: {
         '/LogIn': (context) => const LogInPage(),
         '/SignUp': (context) => const SignUpPage(),

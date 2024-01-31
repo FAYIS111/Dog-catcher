@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'dart:io' as io if (dart.library.html) 'dart:html';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dog_catcher/widgets/AppButton.dart';
@@ -148,7 +151,12 @@ class _ReportPageState extends State<ReportPage> {
                   noImage,
                   height: 300.0,
                   width: double.infinity,
-                )
+                )  : kIsWeb
+                    ? Image.memory(
+                        Uint8List.fromList(pickedFile!.bytes!),fit: BoxFit.fill,
+                        width: 200,
+                        height: 200,
+                      )
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
@@ -170,16 +178,13 @@ class _ReportPageState extends State<ReportPage> {
             width: 150,
             height: 50,
             buttonText: "SELECT IMAGE",
-            buttonAction: () async {
-              Map<Permission, PermissionStatus> statuses = await [
-                Permission.storage,
-                Permission.camera,
-              ].request();
-              if (statuses[Permission.storage]!.isGranted &&
-                  statuses[Permission.camera]!.isGranted) {
-                showImagePicker(context);
+            buttonAction:  () async {
+              if (kIsWeb) {
+                // For web, use FilePicker to select files
+                await selectFile();
               } else {
-                print('No permission provided');
+                // For other platforms, show the image picker
+                showImagePicker(context);
               }
             },
           ),
@@ -207,7 +212,7 @@ class _ReportPageState extends State<ReportPage> {
                   lat = '${value.latitude}';
                   long = '${value.longitude}';
                   setState(() {
-                    locationMessage = 'Latitude: $lat , Longitude: $long';
+                    locationMessage = 'Lat: $lat , Long: $long';
                   });
                   _liveLocation();
                 });
@@ -311,13 +316,24 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 
-  Future selectFile() async {
+  
+ Future<void> selectFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles();
-      if (result == null) return;
-      setState(() {
-        pickedFile = result.files.first;
-      });
+      if (kIsWeb) {
+        final result = await FilePicker.platform.pickFiles();
+        if (result == null) return;
+
+        setState(() {
+          pickedFile = result.files.first;
+        });
+      } else {
+        final result = await FilePicker.platform.pickFiles();
+        if (result == null) return;
+
+        setState(() {
+          pickedFile = result.files.first;
+        });
+      }
     } catch (e) {
       print('Error selecting file: $e');
     }

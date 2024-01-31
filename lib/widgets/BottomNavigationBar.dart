@@ -22,7 +22,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
           color: Colors.yellow,
           border: Border.all(
             width: 1,
-            color: Colors.purple,
           ),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(13),

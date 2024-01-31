@@ -7,9 +7,5 @@ Widget iconButton({
   return IconButton(
     onPressed: buttonAction,
     icon: buttonIcon,
-    style: ButtonStyle(
-      iconColor: MaterialStateProperty.all(Colors.purple),
-      backgroundColor: MaterialStateProperty.all(Colors.purple),
-    ),
   );
 }

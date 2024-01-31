@@ -72,7 +72,7 @@ class _FinalPageState extends State<FinalPage> {
                     color: MaterialStateProperty.all(Colors.greenAccent),
                     width: 150,
                     height: 40,
-                    buttonText: 'ADMIN PANAL',
+                    buttonText: 'REPORT',
                     buttonAction: () {
                       Navigator.pushNamed(context, '/CartPage');
                     },

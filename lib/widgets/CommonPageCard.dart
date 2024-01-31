@@ -26,6 +26,7 @@ class _CommonPageCardState extends State<CommonPageCard> {
       child: GestureDetector(
         onTap: widget.clickAction,
         child: Card(
+          color: Colors.white,
           shadowColor: Colors.grey,
           elevation: 12,
           child: Column(
@@ -36,7 +37,10 @@ class _CommonPageCardState extends State<CommonPageCard> {
                   color: Colors.white,
                   child: Column(
                     children: [
-                      const Text("Click Here"),
+                      const Text(
+                        "Click Here",
+                        style: TextStyle(fontSize: 28),
+                      ),
                       Text(
                         widget.cardText,
                         style: const TextStyle(
