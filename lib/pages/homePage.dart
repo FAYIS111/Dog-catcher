@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               height: 300,
               child: Image.asset(
                 Logo5,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
             appButton(

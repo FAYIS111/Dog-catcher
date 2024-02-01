@@ -11,7 +11,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -33,6 +32,7 @@ class _ReportPageState extends State<ReportPage> {
   String locationMessage = 'Current location of the user';
   late String lat;
   late String long;
+   
 
   Future<Position> _getCurrentLocation() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -52,6 +52,7 @@ class _ReportPageState extends State<ReportPage> {
     }
     return await Geolocator.getCurrentPosition();
   }
+
 
   void _liveLocation() {
     LocationSettings locationSettings = const LocationSettings(
@@ -98,8 +99,20 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   Future<void> uploadFile() async {
-    try {
-      if (pickedFile != null) {
+  try {
+    if (pickedFile != null) {
+      if (kIsWeb) {
+        // For web, use the Uint8List directly
+        final Uint8List fileBytes = pickedFile!.bytes!;
+        final ref = FirebaseStorage.instance.ref().child('files/${pickedFile!.name}');
+
+        await ref.putData(fileBytes);
+
+        String downloadURL = await ref.getDownloadURL();
+
+        addCollection(downloadURL);
+      } else {
+        // For other platforms, use the file path
         final path = 'files/${pickedFile!.name}';
         final file = File(pickedFile!.path!);
         final ref = FirebaseStorage.instance.ref().child(path);
@@ -109,13 +122,15 @@ class _ReportPageState extends State<ReportPage> {
         String downloadURL = await ref.getDownloadURL();
 
         addCollection(downloadURL);
-      } else {
-        print('No file selected');
       }
-    } catch (e) {
-      print('Error uploading file: $e');
+    } else {
+      print('No file selected');
     }
+  } catch (e) {
+    print('Error uploading file: $e');
   }
+}
+
 
   void addCollection(String downloadURL) {
     final data = {
@@ -128,6 +143,7 @@ class _ReportPageState extends State<ReportPage> {
 
     dogCollection.add(data);
   }
+   
 
   @override
   Widget build(BuildContext context) {
@@ -151,24 +167,27 @@ class _ReportPageState extends State<ReportPage> {
                   noImage,
                   height: 300.0,
                   width: double.infinity,
-                )  : kIsWeb
-                    ? Image.memory(
-                        Uint8List.fromList(pickedFile!.bytes!),fit: BoxFit.fill,
-                        width: 200,
-                        height: 200,
-                      )
-              : Padding(
+                )  : Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: double.infinity,
-                    height: 400,
-                    child: Card(
-                      shadowColor: Colors.grey,
-                      elevation: 14,
-                      child: Image.file(
-                        File(pickedFile!.path!),
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+                  child: kIsWeb
+                      ? Image.memory(
+                          Uint8List.fromList(pickedFile!.bytes!),fit: BoxFit.fill,
+                          width: 200,
+                          height: 400,
+                        )
+                                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 400,
+                      child: Card(
+                        shadowColor: Colors.grey,
+                        elevation: 14,
+                        child: Image.file(
+                          File(pickedFile!.path!),
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
